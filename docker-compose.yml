@@ -1,0 +1,13 @@
+services:
+  api:
+    build: .
+    container_name: booking-api
+    ports:
+      - "8080:8080"
+    environment:
+      # Use the Neon URL with the 'pooler' address for better performance
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+      - SPRING_DATASOURCE_USERNAME=neondb_owner
+      - SPRING_DATASOURCE_PASSWORD=npg_XYI7V1TcelNt
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: always
