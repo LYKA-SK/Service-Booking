@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service.config;
+package com.mindvault.online_service.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
