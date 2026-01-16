@@ -3,21 +3,22 @@ spring:
     name: smart-service-booking
 
   main:
-    allow-bean-definition-overriding: true # <-- added this
+    allow-bean-definition-overriding: true
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require}
-    username: ${SPRING_DATASOURCE_USERNAME:neondb_owner}
-    password: ${SPRING_DATASOURCE_PASSWORD:npg_XYI7V1TcelNt}
+    url: jdbc:postgresql://ep-dawn-hall-a1ti7go7-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
+    username: neondb_owner
+    password: npg_21hBWcMoNAjP
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
         hibernate.temp.use_jdbc_metadata_defaults: false
 
 server:
