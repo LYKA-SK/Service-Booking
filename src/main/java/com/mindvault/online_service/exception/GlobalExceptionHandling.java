@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service.exception;
+package com.mindvault.online_service.exception;
 
 public class GlobalExceptionHandling {
 //	GlobalExceptionHandling
