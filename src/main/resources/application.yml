@@ -13,7 +13,11 @@ spring:
 
   jpa:
     hibernate:
+<<<<<<< HEAD
       ddl-auto: create  
+=======
+      ddl-auto: create
+>>>>>>> staging
     show-sql: true
     properties:
       hibernate:
