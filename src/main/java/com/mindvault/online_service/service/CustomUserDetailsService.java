@@ -1,6 +1,5 @@
 package com.mindvault.online_service.service;
 
-import com.mindvault.online_service.entities.User;
 import com.mindvault.online_service.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
