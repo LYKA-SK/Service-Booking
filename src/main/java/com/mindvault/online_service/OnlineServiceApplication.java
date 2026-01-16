@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service;
+package com.mindvault.online_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

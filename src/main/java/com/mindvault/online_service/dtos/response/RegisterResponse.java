@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service.dtos.response;
+package com.mindvault.online_service.dtos.response;
 
 public class RegisterResponse {
 //	RegisterResponse

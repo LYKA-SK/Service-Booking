@@ -1,7 +1,10 @@
 spring:
   application:
     name: smart-service-booking
-  
+
+  main:
+    allow-bean-definition-overriding: true  # <-- added this
+
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require}
     username: ${SPRING_DATASOURCE_USERNAME:neondb_owner}
@@ -15,7 +18,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        # Neon works best with these settings for cloud connections
         hibernate.temp.use_jdbc_metadata_defaults: false 
 
 server:
