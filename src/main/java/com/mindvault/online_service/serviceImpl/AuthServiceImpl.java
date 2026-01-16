@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service.serviceImpl;
+package com.mindvault.online_service.serviceImpl;
 
 public class AuthServiceImpl {
 //	AuthServiceImpl

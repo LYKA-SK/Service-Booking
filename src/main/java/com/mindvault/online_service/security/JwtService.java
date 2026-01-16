@@ -1,4 +1,4 @@
-package com.mindvault.Online_Service.security;
+package com.mindvault.online_service.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -31,6 +31,11 @@ public class JwtService {
     // Check if token is valid
     public boolean isTokenValid(String token) {
         return getClaims(token).getExpiration().after(new Date());
+    }
+
+    // ✅ Public method for extracting claims (for your filter)
+    public Claims extractClaims(String token) {
+        return getClaims(token);
     }
 
     // Helper: get claims
