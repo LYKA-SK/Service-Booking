@@ -1,6 +1,7 @@
 package com.mindvault.online_service.security;
 
 import com.mindvault.online_service.entities.User;
+
 import com.mindvault.online_service.repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -25,11 +26,8 @@ public class JwtFilter extends OncePerRequestFilter {
     private final UserRepository userRepository;
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
+            throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
@@ -40,20 +38,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
         Claims claims = jwtService.extractClaims(token);
-
         String email = claims.getSubject();
         String role = claims.get("role", String.class);
 
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
+            // Fix: Check if prefix exists to avoid ROLE_ROLE_PROVIDER
+            String authorityName = (role != null && role.startsWith("ROLE_")) ? role : "ROLE_" + role;
+            
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    user, null, List.of(new SimpleGrantedAuthority(authorityName)));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
