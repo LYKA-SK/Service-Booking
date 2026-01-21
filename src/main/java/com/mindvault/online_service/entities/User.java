@@ -2,13 +2,9 @@ package com.mindvault.online_service.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,51 +14,42 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User implements UserDetails { // <-- implement UserDetails
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 🔐 Auth
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
+    private String fullName; // Added this field so .getFullName() works
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private RoleEnum role;
 
-    // 👤 Profile (optional at register)
-    private String fullName;
-    private String phone;
-    private String address;
-    private String avatarUrl;
-
-    @Column(length = 500)
-    private String bio;
-
-    // 🛡 System
+    @Builder.Default 
     private boolean enabled = true;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
     // ====== UserDetails implementation ======
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // This produces "ROLE_ADMIN" because your Enum is ADMIN
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); 
+        // Prefixes the role with ROLE_ (e.g., ROLE_ADMIN) as Spring Security expects
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return email; // We use email as the username
     }
 
     @Override

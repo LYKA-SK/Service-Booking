@@ -5,12 +5,15 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
+import java.security.Key; // Import this for 'Key'
 import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "change-this-secret-key-to-env-later";
+    // Ensure this key is exactly 32 characters or more
+    private static final String SECRET_KEY = "your-32-character-secret-key-at-least-!!!";
+    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
     // Generate token
     public String generateToken(String email, String role) {
@@ -19,29 +22,24 @@ public class JwtService {
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24h
-                .signWith(Keys.hmacShaKeyFor(SECRET_KEY.getBytes()))
+                .signWith(key) 
                 .compact();
     }
 
     // Extract email
     public String extractEmail(String token) {
-        return getClaims(token).getSubject();
+        return extractClaims(token).getSubject();
     }
 
     // Check if token is valid
     public boolean isTokenValid(String token) {
-        return getClaims(token).getExpiration().after(new Date());
+        return extractClaims(token).getExpiration().after(new Date());
     }
 
-    // ✅ Public method for extracting claims (for your filter)
+    // Public method for extracting claims (for your filter)
     public Claims extractClaims(String token) {
-        return getClaims(token);
-    }
-
-    // Helper: get claims
-    private Claims getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY.getBytes())
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

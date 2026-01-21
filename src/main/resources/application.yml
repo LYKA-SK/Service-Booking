@@ -1,23 +1,21 @@
 spring:
   application:
     name: smart-service-booking
-  main:
-    allow-bean-definition-overriding: true
+
   datasource:
-    url: jdbc:postgresql://ep-dawn-hall-a1ti7go7-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
+    url: jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
     username: neondb_owner
-    password: npg_21hBWcMoNAjP
+    password: npg_XYI7V1TcelNt
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
-      ddl-auto: update 
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
-        # Removed redundant dialect to let Spring Boot 3.4 auto-detect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
-        hibernate.temp.use_jdbc_metadata_defaults: false
-    open-in-view: false
 
 server:
   port: 8080
