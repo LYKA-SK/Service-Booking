@@ -56,7 +56,8 @@ public class User implements UserDetails { // <-- implement UserDetails
     // ====== UserDetails implementation ======
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); // ROLE_ADMIN, ROLE_USER, etc.
+        // This produces "ROLE_ADMIN" because your Enum is ADMIN
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.name())); 
     }
 
     @Override

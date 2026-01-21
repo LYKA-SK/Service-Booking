@@ -6,28 +6,20 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "categories")
-@Getter @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; //
+    private Integer id;
 
     @Column(nullable = false)
-    private String name; //
-
-    @Column(columnDefinition = "TEXT")
-    private String description; //
+    private String name;
 
     @Column(name = "user_id", nullable = false)
-    private Long userId; // The admin who created it
+    private Integer userId; // Admin who created it
+
+    private String description;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt; //
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
+    private LocalDateTime createdAt = LocalDateTime.now();
 }

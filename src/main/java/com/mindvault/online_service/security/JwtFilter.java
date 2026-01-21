@@ -44,11 +44,9 @@ public class JwtFilter extends OncePerRequestFilter {
         User user = userRepository.findByEmail(email).orElse(null);
 
         if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // Fix: Check if prefix exists to avoid ROLE_ROLE_PROVIDER
-            String authorityName = (role != null && role.startsWith("ROLE_")) ? role : "ROLE_" + role;
-            
+            // Putting the actual 'user' entity into the principal
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    user, null, List.of(new SimpleGrantedAuthority(authorityName)));
+                    user, null, user.getAuthorities());
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
