@@ -1,12 +1,6 @@
 package com.mindvault.online_service.security;
 
-<<<<<<< HEAD
-import com.mindvault.online_service.entities.User;
-
-import com.mindvault.online_service.repositories.UserRepository;
-=======
 import com.mindvault.online_service.service.CustomUserDetailsService;
->>>>>>> development
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -28,8 +22,11 @@ public class JwtFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) 
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
 
@@ -40,17 +37,12 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authHeader.substring(7);
         Claims claims = jwtService.extractClaims(token);
+
         String email = claims.getSubject();
 
         if (email != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
-<<<<<<< HEAD
-        if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // Putting the actual 'user' entity into the principal
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    user, null, user.getAuthorities());
-=======
         	UserDetails userDetails =
         	        userDetailsService.loadUserByUsername(email);
 
@@ -60,7 +52,6 @@ public class JwtFilter extends OncePerRequestFilter {
         	                null,
         	                userDetails.getAuthorities()
         	        );
->>>>>>> development
 
         	SecurityContextHolder.getContext().setAuthentication(auth);
         }
