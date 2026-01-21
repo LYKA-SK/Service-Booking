@@ -1,28 +1,25 @@
 package com.mindvault.online_service.security;
 
-import com.mindvault.online_service.entities.User;
-import com.mindvault.online_service.repositories.UserRepository;
+import com.mindvault.online_service.service.CustomUserDetailsService;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private final UserRepository userRepository;
+    private final CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(
@@ -42,20 +39,21 @@ public class JwtFilter extends OncePerRequestFilter {
         Claims claims = jwtService.extractClaims(token);
 
         String email = claims.getSubject();
-        String role = claims.get("role", String.class);
 
-        User user = userRepository.findByEmail(email).orElse(null);
+        if (email != null &&
+                SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        if (user != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        	UserDetails userDetails =
+        	        userDetailsService.loadUserByUsername(email);
 
-            UsernamePasswordAuthenticationToken authentication =
-                    new UsernamePasswordAuthenticationToken(
-                            user,
-                            null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
+        	UsernamePasswordAuthenticationToken auth =
+        	        new UsernamePasswordAuthenticationToken(
+        	                userDetails,
+        	                null,
+        	                userDetails.getAuthorities()
+        	        );
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        	SecurityContextHolder.getContext().setAuthentication(auth);
         }
 
         filterChain.doFilter(request, response);
