@@ -3,14 +3,11 @@ package com.mindvault.online_service.controller;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mindvault.online_service.entities.RoleRequest;
+import com.mindvault.online_service.entities.User;
+import com.mindvault.online_service.security.CurrentUser;
 import com.mindvault.online_service.service.RoleRequestService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,12 +26,12 @@ public class AdminRoleRequestController {
     }
 
     @PostMapping("/{id}/approve")
-    public RoleRequest approve(@PathVariable Long id, @RequestHeader("adminId") Long adminId) {
-        return roleRequestService.approveRequest(id, adminId);
+    public RoleRequest approve(@PathVariable Long id, @CurrentUser User admin) {
+        return roleRequestService.approveRequest(id, admin.getId());
     }
 
     @PostMapping("/{id}/reject")
-    public RoleRequest reject(@PathVariable Long id, @RequestHeader("adminId") Long adminId) {
-        return roleRequestService.rejectRequest(id, adminId);
+    public RoleRequest reject(@PathVariable Long id, @CurrentUser User admin) {
+        return roleRequestService.rejectRequest(id, admin.getId());
     }
 }
