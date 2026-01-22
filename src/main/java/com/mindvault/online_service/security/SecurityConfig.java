@@ -46,14 +46,17 @@ public class SecurityConfig {
                 // Public Access
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
-                // 1. Categories: Read-only for everyone (Admin, Customer, Provider)
+                //  Categories: Read-only for everyone (Admin, Customer, Provider)
                 .requestMatchers(HttpMethod.GET, "/api/categories/**")
                     .hasAnyRole("ADMIN", "CUSTOMER", "PROVIDER")
+                 // Availability Rules
+                    .requestMatchers(HttpMethod.POST, "/api/availability/**").hasRole("PROVIDER")
+                    .requestMatchers(HttpMethod.GET, "/api/availability/**").hasAnyRole("CUSTOMER", "PROVIDER", "ADMIN")
                 
-                // 2. Categories: Write operations (POST, PUT, DELETE) ONLY for Admin
+                //  Categories: Write operations (POST, PUT, DELETE) ONLY for Admin
                 .requestMatchers("/api/categories/**").hasRole("ADMIN")
                 
-                // 3. Other Admin specific routes
+                //  Other Admin specific routes
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
