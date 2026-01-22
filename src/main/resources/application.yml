@@ -1,6 +1,11 @@
 spring:
   application:
     name: smart-service-booking
+  
+ 
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
 
   datasource:
     url: jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require

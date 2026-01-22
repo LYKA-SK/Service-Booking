@@ -2,10 +2,9 @@ package com.mindvault.online_service.repositories;
 
 import com.mindvault.online_service.entities.Availability;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 import java.util.List;
 
-@Repository
 public interface AvailabilityRepository extends JpaRepository<Availability, Long> {
+    // Finds schedule specifically for the provider who owns the service
     List<Availability> findByProviderId(Long providerId);
 }

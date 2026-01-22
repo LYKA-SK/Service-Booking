@@ -1,9 +1,12 @@
 package com.mindvault.online_service.controller;
 
-import com.mindvault.online_service.entities.Availability;
+import com.mindvault.online_service.dtos.request.AvailabilityRequest;
+import com.mindvault.online_service.dtos.response.AvailabilityResponse;
+import com.mindvault.online_service.entities.User;
 import com.mindvault.online_service.service.AvailabilityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,17 +18,16 @@ public class AvailabilityController {
 
     private final AvailabilityService availabilityService;
 
-    // POST: Provider sets their working hours
     @PostMapping
-    public ResponseEntity<Availability> setAvailability(@RequestBody Availability availability) {
-        // Logic to get current logged-in provider ID would go here
-        Long mockProviderId = 1L; 
-        return ResponseEntity.ok(availabilityService.saveAvailability(availability, mockProviderId));
+    public ResponseEntity<AvailabilityResponse> setAvailability(
+            @RequestBody AvailabilityRequest request,
+            @AuthenticationPrincipal User currentUser) { 
+        // Automatically uses the ID from the Login Token (whether Admin or Provider)
+        return ResponseEntity.ok(availabilityService.saveAvailability(request, currentUser.getId()));
     }
 
-    // GET: Customer views availability for a specific service
-    @GetMapping("/{service_id}")
-    public ResponseEntity<List<Availability>> getServiceAvailability(@PathVariable Long service_id) {
-        return ResponseEntity.ok(availabilityService.getAvailabilityByService(service_id));
+    @GetMapping("/{serviceId}")
+    public ResponseEntity<List<AvailabilityResponse>> getServiceAvailability(@PathVariable Long serviceId) {
+        return ResponseEntity.ok(availabilityService.getAvailabilityByService(serviceId));
     }
 }
