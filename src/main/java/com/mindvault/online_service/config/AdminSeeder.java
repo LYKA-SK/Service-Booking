@@ -33,7 +33,7 @@ public class AdminSeeder {
 
             userRepository.save(admin);
 
-            System.out.println("✅ Admin user created");
+            System.out.println(" Admin user created");
         };
     }
 }

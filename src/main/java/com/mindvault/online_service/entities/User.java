@@ -34,7 +34,7 @@ public class User implements UserDetails {
     @Builder.Default 
     private boolean enabled = true;
 
-    // ====== UserDetails implementation ======
+   
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
