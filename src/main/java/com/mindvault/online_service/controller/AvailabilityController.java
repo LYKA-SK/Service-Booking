@@ -1,6 +1,5 @@
 package com.mindvault.online_service.controller;
 
-import com.mindvault.online_service.dtos.request.AvailabilityRequest;
 import com.mindvault.online_service.entities.Availability;
 import com.mindvault.online_service.service.AvailabilityService;
 import org.springframework.beans.factory.annotation.Autowired;
