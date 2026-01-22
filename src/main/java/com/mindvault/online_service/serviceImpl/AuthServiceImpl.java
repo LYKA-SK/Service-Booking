@@ -1,3 +1,4 @@
+
 package com.mindvault.online_service.serviceImpl;
 
 import com.mindvault.online_service.dtos.request.RegisterRequest;
@@ -8,6 +9,7 @@ import com.mindvault.online_service.entities.User;
 import com.mindvault.online_service.repositories.UserRepository;
 import com.mindvault.online_service.security.JwtService;
 import com.mindvault.online_service.service.AuthService;
+
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
