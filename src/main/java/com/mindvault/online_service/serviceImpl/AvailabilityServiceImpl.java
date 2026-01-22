@@ -45,11 +45,9 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     @Override
     @Transactional(readOnly = true)
     public List<AvailabilityResponse> getAvailabilityByService(Long serviceId) {
-        // This finds the service your team is building
         ServiceEntity service = serviceRepository.findById(serviceId)
                 .orElseThrow(() -> new RuntimeException("Service not found"));
         
-        // This finds the availability hours YOU are building
         return availabilityRepository.findByProviderId(service.getProvider().getId())
                 .stream()
                 .map(this::mapToResponse)
@@ -59,7 +57,6 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     private AvailabilityResponse mapToResponse(Availability availability) {
         return AvailabilityResponse.builder()
                 .id(availability.getId())
-                // Fixed: Now uses getFullName() from your updated User entity
                 .providerName(availability.getProvider().getFullName()) 
                 .date(availability.getDate())
                 .startTime(availability.getStartTime())

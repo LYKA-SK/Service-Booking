@@ -9,5 +9,5 @@ public class CategoryResponse {
     private Long id;
     private String name;
     private String description;
-    private String createdBy; // Shows Admin name instead of full User object
+    private String createdBy; 
 }
