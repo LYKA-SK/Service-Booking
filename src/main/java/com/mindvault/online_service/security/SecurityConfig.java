@@ -43,20 +43,18 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public Access
+                // 1. Public Access
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 
-                //  Categories: Read-only for everyone (Admin, Customer, Provider)
-                .requestMatchers(HttpMethod.GET, "/api/categories/**")
-                    .hasAnyRole("ADMIN", "CUSTOMER", "PROVIDER")
-                 // Availability Rules
-                    .requestMatchers(HttpMethod.POST, "/api/availability/**").hasRole("PROVIDER")
-                    .requestMatchers(HttpMethod.GET, "/api/availability/**").hasAnyRole("CUSTOMER", "PROVIDER", "ADMIN")
+                // 2. Availability Rules (Fixed chain)
+                .requestMatchers(HttpMethod.POST, "/api/availability/**").hasAnyRole("PROVIDER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/availability/**").hasAnyRole("CUSTOMER", "PROVIDER", "ADMIN")
                 
-                //  Categories: Write operations (POST, PUT, DELETE) ONLY for Admin
+                // 3. Categories Rules
+                .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("ADMIN", "CUSTOMER", "PROVIDER")
                 .requestMatchers("/api/categories/**").hasRole("ADMIN")
                 
-                //  Other Admin specific routes
+                // 4. Other Admin routes
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 
                 .anyRequest().authenticated()
@@ -65,7 +63,6 @@ public class SecurityConfig {
 
         return http.build();
     }
-
     // Swagger/OpenAPI JWT configuration
     @Bean
     public OpenAPI customOpenAPI() {

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AvailabilityService {
     AvailabilityResponse saveAvailability(AvailabilityRequest request, Long providerId);
-        List<AvailabilityResponse> getAvailabilityByService(Long serviceId);
+    List<AvailabilityResponse> getAvailabilityByService(Long serviceId);
 }

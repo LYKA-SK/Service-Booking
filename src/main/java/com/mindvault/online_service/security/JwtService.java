@@ -5,7 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
-import java.security.Key; // Import this for 'Key'
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Service
@@ -13,15 +14,17 @@ public class JwtService {
 
     // Ensure this key is exactly 32 characters or more
     private static final String SECRET_KEY = "your-32-character-secret-key-at-least-!!!";
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    
+    // In 0.12.x, use SecretKey specifically
+    private final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     // Generate token
     public String generateToken(String email, String role) {
         return Jwts.builder()
-                .setSubject(email)
+                .subject(email) 
                 .claim("role", role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 24h
+                .issuedAt(new Date()) 
+                .expiration(new Date(System.currentTimeMillis() + 86400000)) 
                 .signWith(key) 
                 .compact();
     }
@@ -33,15 +36,19 @@ public class JwtService {
 
     // Check if token is valid
     public boolean isTokenValid(String token) {
-        return extractClaims(token).getExpiration().after(new Date());
+        try {
+            return extractClaims(token).getExpiration().after(new Date());
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    // Public method for extracting claims (for your filter)
+    // JJWT 0.12.x
     public Claims extractClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
+        return Jwts.parser()             
+                .verifyWith(key)        
                 .build()
-                .parseClaimsJws(token)
-                .getBody();
+                .parseSignedClaims(token) 
+                .getPayload();           
     }
 }
