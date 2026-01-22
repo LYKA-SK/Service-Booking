@@ -18,6 +18,9 @@ public class RoleRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    private String serviceType;
+    private String description;
 
     // The user who requested the role
     @ManyToOne

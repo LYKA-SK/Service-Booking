@@ -1,16 +1,20 @@
 package com.mindvault.online_service.service;
 
+import com.mindvault.online_service.dtos.request.ProviderRoleRequest;
 import com.mindvault.online_service.entities.RoleRequest;
+import com.mindvault.online_service.entities.User;
 
 import java.util.List;
 
 public interface RoleRequestService {
 
-    RoleRequest requestProviderRole(Long userId);
+    RoleRequest requestProviderRole(Long userId, ProviderRoleRequest request);
 
     List<RoleRequest> getPendingRequests();
 
-    RoleRequest approveRequest(Long requestId, Long adminId);
+    List<RoleRequest> getRequestsByUser(Long userId);
 
-    RoleRequest rejectRequest(Long requestId, Long adminId);
+    RoleRequest approveRequest(Long requestId, User admin);
+
+    RoleRequest rejectRequest(Long requestId, User admin);
 }
