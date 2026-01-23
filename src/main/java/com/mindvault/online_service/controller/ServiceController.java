@@ -38,7 +38,7 @@ public class ServiceController {
         return ResponseEntity.ok(serviceService.createService(request, creator));
     }
 
-    // ✅ NEW: Update service
+    //  NEW: Update service
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','PROVIDER')")
     public ResponseEntity<ServiceResponse> updateService(
