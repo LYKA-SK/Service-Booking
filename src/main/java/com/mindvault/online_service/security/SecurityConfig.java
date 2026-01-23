@@ -27,54 +27,57 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final JwtFilter jwtFilter;
 
+    // Authentication manager bean
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = 
-            http.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(passwordEncoder);
-        return authenticationManagerBuilder.build();
+        AuthenticationManagerBuilder authBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+        authBuilder.userDetailsService(userDetailsService)
+                   .passwordEncoder(passwordEncoder);
+        return authBuilder.build();
     }
 
+    // Security filter chain
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // 1. Public Access
+                // Public endpoints
                 .requestMatchers("/api/auth/**", "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                
-                // 2. Availability Rules (Fixed chain)
-                .requestMatchers(HttpMethod.POST, "/api/availability/**").hasAnyRole("PROVIDER", "ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/availability/**").hasAnyRole("CUSTOMER", "PROVIDER", "ADMIN")
-                
-                // 3. Categories Rules
-                .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("ADMIN", "CUSTOMER", "PROVIDER")
+
+                // Booking endpoints
+             
+
+                // Category endpoints
+                .requestMatchers(HttpMethod.GET, "/api/categories/**").hasAnyRole("ADMIN","CUSTOMER","PROVIDER")
                 .requestMatchers("/api/categories/**").hasRole("ADMIN")
-                
-                // 4. Other Admin routes
+
+                // Admin endpoints
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                
+
+                // Other requests require authentication
                 .anyRequest().authenticated()
             )
+            // JWT filter before UsernamePasswordAuthenticationFilter
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-    // Swagger/OpenAPI JWT configuration
+
+    // Swagger JWT configuration
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
-            .components(new Components()
-                .addSecuritySchemes("bearerAuth",
-                    new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
-                )
-            );
+                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components()
+                        .addSecuritySchemes("bearerAuth",
+                                new SecurityScheme()
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                        )
+                );
     }
 }
