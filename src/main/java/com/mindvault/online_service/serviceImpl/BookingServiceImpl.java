@@ -2,7 +2,10 @@ package com.mindvault.online_service.serviceImpl;
 
 import com.mindvault.online_service.dtos.request.BookingRequest;
 import com.mindvault.online_service.dtos.response.BookingResponse;
-import com.mindvault.online_service.entities.*;
+import com.mindvault.online_service.entities.Booking;
+import com.mindvault.online_service.entities.BookingStatus;
+import com.mindvault.online_service.entities.ServiceEntity;
+import com.mindvault.online_service.entities.User;
 import com.mindvault.online_service.exception.ResourceNotFoundException;
 import com.mindvault.online_service.repositories.BookingRepository;
 import com.mindvault.online_service.repositories.ServiceRepository;
@@ -55,7 +58,7 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
-  // -------------------- CANCEL BOOKING --------------------
+    // -------------------- CANCEL BOOKING --------------------
     @Override
     public void cancelBooking(Long bookingId, User customer) {
         Booking booking = getBooking(bookingId);
@@ -68,21 +71,37 @@ public class BookingServiceImpl implements BookingService {
         bookingRepository.save(booking);
     }
 
+    // -------------------- APPROVE BOOKING --------------------
+    @Override
+    public BookingResponse approveBooking(Long bookingId, User approver) {
+        Booking booking = getBooking(bookingId);
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new IllegalStateException("Only pending bookings can be approved");
+        }
+
+        booking.setStatus(BookingStatus.APPROVED);
+        bookingRepository.save(booking);
+        return BookingResponse.fromEntity(booking);
+    }
+
+    // -------------------- REJECT BOOKING --------------------
+    @Override
+    public BookingResponse rejectBooking(Long bookingId, User approver) {
+        Booking booking = getBooking(bookingId);
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new IllegalStateException("Only pending bookings can be rejected");
+        }
+
+        booking.setStatus(BookingStatus.REJECTED);
+        bookingRepository.save(booking);
+        return BookingResponse.fromEntity(booking);
+    }
+
     // -------------------- HELPER METHOD --------------------
     private Booking getBooking(Long id) {
         return bookingRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Booking not found"));
-    }
-
-    @Override
-    public BookingResponse approveBooking(Long bookingId, User approver) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'approveBooking'");
-    }
-
-    @Override
-    public BookingResponse rejectBooking(Long bookingId, User approver) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'rejectBooking'");
     }
 }
