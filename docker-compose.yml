@@ -5,9 +5,18 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Use the Neon URL with the 'pooler' address for better performance
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-late-dew-a1j0cwg1-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ep-dawn-hall-a1ti7go7-pooler.ap-southeast-1.aws.neon.tech:5432/neondb?sslmode=require
       - SPRING_DATASOURCE_USERNAME=neondb_owner
-      - SPRING_DATASOURCE_PASSWORD=npg_XYI7V1TcelNt
+      - SPRING_DATASOURCE_PASSWORD=npg_21hBWcMoNAjP
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: always
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-ui
+    ports:
+      - "5050:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
     restart: always
