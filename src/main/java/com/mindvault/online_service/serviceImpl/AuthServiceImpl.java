@@ -1,8 +1,11 @@
 
 package com.mindvault.online_service.serviceImpl;
 
-import com.mindvault.online_service.dtos.request.RegisterRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.mindvault.online_service.dtos.request.LoginRequest;
+import com.mindvault.online_service.dtos.request.RegisterRequest;
 import com.mindvault.online_service.dtos.response.AuthResponse;
 import com.mindvault.online_service.entities.RoleEnum;
 import com.mindvault.online_service.entities.User;
@@ -10,10 +13,7 @@ import com.mindvault.online_service.repositories.UserRepository;
 import com.mindvault.online_service.security.JwtService;
 import com.mindvault.online_service.service.AuthService;
 
-
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

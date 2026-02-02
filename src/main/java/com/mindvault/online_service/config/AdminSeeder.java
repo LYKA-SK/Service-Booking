@@ -1,13 +1,15 @@
 package com.mindvault.online_service.config;
 
-import com.mindvault.online_service.entities.RoleEnum;
-import com.mindvault.online_service.entities.User;
-import com.mindvault.online_service.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.mindvault.online_service.entities.RoleEnum;
+import com.mindvault.online_service.entities.User;
+import com.mindvault.online_service.repositories.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor

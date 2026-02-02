@@ -1,9 +1,11 @@
 package com.mindvault.online_service.service;
 
-import com.mindvault.online_service.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
+
+import com.mindvault.online_service.repositories.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

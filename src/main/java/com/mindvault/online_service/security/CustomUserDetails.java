@@ -1,11 +1,13 @@
 package com.mindvault.online_service.security;
 
-import com.mindvault.online_service.entities.User;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import java.util.Collection;
-import java.util.List;
+
+import com.mindvault.online_service.entities.User;
 
 public class CustomUserDetails implements UserDetails {
     private final User user;
